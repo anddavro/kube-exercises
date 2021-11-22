@@ -1,0 +1,29 @@
+
+{
+   "kind":"Pod",
+   "apiVersion":"v1",
+   "metadata":{
+      "name":"nginx",
+      "labels":{
+         "run":"nginx"
+      }
+   },
+   "spec":{
+      "containers":[
+         {
+            "name":"nginx",
+            "image":"nginx:1.19.4",
+            "resources":{
+                "limits":{
+                  "memory":"256Mi",
+                  "cpu":"100m"
+               },
+               "requests":{
+                  "memory":"256Mi",
+                  "cpu":"100m"
+               }
+            }
+         }
+      ]
+   }
+}

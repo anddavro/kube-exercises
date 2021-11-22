@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-green
+  labels:
+    run: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: nginx
+      version: 0.0.2
+  template:
+    metadata:
+      labels:
+        run: nginx
+        version: 0.0.2
+    spec:
+      containers:
+      - name: nginx
+        ports:
+         - containerPort: 3000
+        image: nginx:1.20
+        command: [ "sh", "-c"]
+        args:
+        - while true; do
+              echo -IP DEL POD '\n';
+              printenv MY_POD_IP;
+              sleep 10;
+          done;
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
+        env:    
+         - name: MY_POD_IP
+           valueFrom:
+            fieldRef:
+             fieldPath: status.podIP

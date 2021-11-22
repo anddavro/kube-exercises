@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginxrepsecreatedep
+  labels:
+    app: nginxreps
+spec:
+  replicas: 3
+  strategy:
+        type: Recreate
+  selector:
+    matchLabels:
+      app: nginxreps
+  template:
+    metadata:
+      labels:
+        app: nginxreps
+    spec:
+      containers:
+      - name: nginxreps
+        image: nginx:1.19.4
+        command: [ "sh", "-c"]
+        args:
+        - while true; do
+              echo -IP DEL POD '\n';
+              printenv MY_POD_IP;
+              sleep 10;
+          done;
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
+        env:    
+         - name: MY_POD_IP
+           valueFrom:
+            fieldRef:
+             fieldPath: status.podIP
