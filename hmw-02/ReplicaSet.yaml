@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginxreps
+  labels:
+    app: nginxreps
+    tier: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: backend
+  template:
+    metadata:
+      labels:
+        tier: backend  
+    spec:
+      containers:
+      - name: nginxreps
+        image: nginx:1.19.4
+        command: [ "sh", "-c"]
+        args:
+        - while true; do
+              echo -IP DEL POD '\n';
+              printenv MY_POD_IP;
+              sleep 10;
+          done;
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
+        env:    
+         - name: MY_POD_IP
+           valueFrom:
+            fieldRef:
+             fieldPath: status.podIP
